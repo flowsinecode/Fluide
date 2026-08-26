@@ -15,6 +15,9 @@ edit_button = menu_bar.add_cascade("Edit")
 view_button = menu_bar.add_cascade("View")
 go_button = menu_bar.add_cascade("Go")
 
+#Menu bar idk lol
+
+
 action = Action(root)
 action.pack(fill="x", padx=8, pady=8)
 
