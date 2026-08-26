@@ -7,7 +7,7 @@
 - [] Settings
 - [] Complete Fluide
 - [] Test it
-- [] Build file
+- [] Build file!
 
 ### Update
 nglam - founder of Fluentix - confirm that this IDE will be official if I finished it!
