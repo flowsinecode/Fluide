@@ -55,8 +55,10 @@ file_dropdown.add_separator()
 
 settings_dropdown = file_dropdown.add_submenu("Setting")
 settings_dropdown.add_option("Theme")
+settings_dropdown.add_option("Editor")
+# settings_dropdown.add_option("Compiler")
 # settings_dropdown.add_option("AI")
-
+settings_dropdown.add_option("Help")
 file_dropdown.add_option(
     option="Exit",
     command=root.destroy,
