@@ -92,6 +92,22 @@ edit_dropdown.add_option(
     accelerator="Ctrl+V"
 )
 
+edit_dropdown.add_separator()
+
+edit_dropdown.add_option(
+    option="Select All",
+    command=editor.codebox.select_all_text,
+    accelerator="Ctrl+A"
+)
+
+
+edit_dropdown.add_separator()
+
+edit_dropdown.add_option(
+    option="Search & Replace",
+    command=editor.codebox.open_search_window,
+    accelerator="Ctrl+F"
+)
 
 
 
