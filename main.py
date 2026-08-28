@@ -1,5 +1,7 @@
 import customtkinter as ctk
 from CTkMenuBarPlus import *
+import subprocess
+import tkinter.messagebox as messagebox
 
 from ui.editor import Editor
 from ui.terminal import Terminal
@@ -20,18 +22,31 @@ go_button = menu_bar.add_cascade("Go")
 action = Action(root)
 action.pack(fill="x", padx=8, pady=8)
 
-content = ctk.CTkFrame(root)
-content.pack(expand=True, fill="both")
+check = subprocess.run(
+    ["where","flu"],
+    capture_output=True,
+    text=True
+)
 
-content.grid_columnconfigure(0, weight=1)
-content.grid_columnconfigure(1, weight=1)
-content.grid_rowconfigure(0, weight=1)
+if check.returncode == 0:
+    content = ctk.CTkFrame(root)
+    content.pack(expand=True, fill="both")
 
-editor = Editor(content)
-editor.grid(row=0, column=0, sticky="nsew")
+    content.grid_columnconfigure(0, weight=1)
+    content.grid_columnconfigure(1, weight=1)
+    content.grid_rowconfigure(0, weight=1)
 
-terminal = Terminal(content)
-terminal.grid(row=0, column=1, sticky="nsew")
+    editor = Editor(content)
+    editor.grid(row=0, column=0, sticky="nsew")
+
+    terminal = Terminal(content)
+    terminal.grid(row=0, column=1, sticky="nsew")
+
+    compilerpath = check.stdout
+else:
+    messagebox.showwarning("Flu Compiler Not found", "Please install it on official Fluentix page.\nFluide will run on Editor-only mode.")
+    editor = Editor(root)
+    editor.pack(expand=True, fill="both")
 
 file_dropdown = CustomDropdownMenu(file_button)
 file_dropdown.add_option(
@@ -111,6 +126,9 @@ edit_dropdown.add_option(
     accelerator="Ctrl+F"
 )
 
-
+view_dropdown = CustomDropdownMenu(view_button)
+view_dropdown.add_option(
+    option="Zen mode"
+)
 
 root.mainloop()
