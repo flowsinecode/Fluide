@@ -2,16 +2,19 @@ import customtkinter as ctk
 from CTkMenuBarPlus import *
 import subprocess
 import tkinter.messagebox as messagebox
+import os
 
 from ui.editor import Editor
 from ui.terminal import Terminal
 from ui.action import Action
 
-from core.file import *
+from core.file import save_as, open_file
 
 root = ctk.CTk()
 root.title("Fluide")
 root.geometry('1200x750')
+
+filepath = False
 
 menu_bar = CTkMenuBar(root)
 file_button = menu_bar.add_cascade("File")
@@ -53,21 +56,45 @@ else:
 
     compilerpath = False
 
+    
+def get_content():
+    return editor.codebox.get("1.0", "end")
+
+def change_file(content="", namefile="Untitled"):
+    filepath = namefile
+    action.name_file.configure(text=os.path.basename(namefile) if namefile != "Untitled" else namefile)
+    editor.codebox.clear_all_text()
+    editor.codebox.insert("1.0", content)
+    editor.codebox.update_code()
+    editor.codebox.clear_history()
+
+def save():
+    if filepath:
+        #* "" -> False. According to Truthy/Falsy
+        with open(filepath, "w", "utf-8") as file:
+            file.write(editor.codebox.get("1.0", "end"))
+    else:
+        lambda: save_as(get_content)
+
+    #! Bug
+
 file_dropdown = CustomDropdownMenu(file_button)
 file_dropdown.add_option(
-    option="New"
+    option="New",
+    command=change_file
 )
 file_dropdown.add_option(
     option="Open",
-    command=open
+    command=lambda: open_file(change_file)
 )
 file_dropdown.add_separator()
 file_dropdown.add_option(
-    option="Save"
+    option="Save",
+    command=save
 )
 file_dropdown.add_option(
     option="Save as",
-    command=save_as
+    command=lambda: save_as(get_content)
 )
 file_dropdown.add_separator()
 
