@@ -122,4 +122,5 @@ view_dropdown.add_option(
     option="Zen mode"
 )
 
+
 root.mainloop()
