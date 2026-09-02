@@ -15,7 +15,6 @@ jobs:
       - name: Post release to X
         env:
           X_CLIENT_ID: ${{ secrets.X_CLIENT_ID }}
-          X_CLIENT_SECRET: ${{ secrets.X_CLIENT_SECRET }}
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
           X_REFRESH_TOKEN: ${{ secrets.X_REFRESH_TOKEN }}
 
@@ -29,40 +28,38 @@ jobs:
           import os
           import urllib.parse
           import urllib.request
+          import urllib.error
 
           client_id = os.environ["X_CLIENT_ID"]
-          client_secret = os.environ["X_CLIENT_SECRET"]
-          access_token = os.environ["X_ACCESS_TOKEN"]
           refresh_token = os.environ["X_REFRESH_TOKEN"]
 
-          # Refresh the OAuth 2.0 access token
+          # Refresh OAuth 2.0 access token
           data = urllib.parse.urlencode({
               "refresh_token": refresh_token,
               "grant_type": "refresh_token",
               "client_id": client_id,
           }).encode()
 
-          credentials = f"{client_id}:{client_secret}".encode()
-          import base64
-
-          auth = base64.b64encode(credentials).decode()
-
-          refresh_request = urllib.request.Request(
+          request = urllib.request.Request(
               "https://api.x.com/2/oauth2/token",
               data=data,
               headers={
-                  "Authorization": f"Basic {auth}",
                   "Content-Type": "application/x-www-form-urlencoded",
-              },
+          },
               method="POST",
           )
 
-          with urllib.request.urlopen(refresh_request) as response:
-              token_data = json.loads(response.read().decode())
+          try:
+              with urllib.request.urlopen(request) as response:
+                  token_data = json.loads(response.read().decode())
+          except urllib.error.HTTPError as e:
+              print("Failed to refresh X access token.")
+              print(e.read().decode())
+              raise
 
           access_token = token_data["access_token"]
 
-          # Build the release post
+          # Build post
           title = os.environ.get("RELEASE_TITLE") or "Unknown version"
           body = os.environ.get("RELEASE_BODY") or "No changes listed."
           url = os.environ["RELEASE_URL"]
@@ -95,9 +92,15 @@ jobs:
               method="POST",
           )
 
-          with urllib.request.urlopen(post_request) as response:
-              result = json.loads(response.read().decode())
+          try:
+              with urllib.request.urlopen(post_request) as response:
+                  result = json.loads(response.read().decode())
+          except urllib.error.HTTPError as e:
+              print("Failed to post to X.")
+              print(e.read().decode())
+              raise
 
           print("Successfully posted release to X!")
           print(f"Post ID: {result['data']['id']}")
           PY
+
