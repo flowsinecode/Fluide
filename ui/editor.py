@@ -7,3 +7,6 @@ class Editor(ctk.CTkFrame):
         self.codebox = CTkCodeBox(self, language="python")
         self.codebox.pack(expand=True, fill="both")
         self.codebox.set_history_enabled("enabled")
+
+    def get_content(self):
+        return self.codebox.get("1.0", "end")

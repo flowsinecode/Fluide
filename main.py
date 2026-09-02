@@ -7,6 +7,8 @@ from ui.editor import Editor
 from ui.terminal import Terminal
 from ui.action import Action
 
+from core.file import *
+
 root = ctk.CTk()
 root.title("Fluide")
 root.geometry('1200x750')
@@ -56,14 +58,16 @@ file_dropdown.add_option(
     option="New"
 )
 file_dropdown.add_option(
-    option="Open"
+    option="Open",
+    command=open
 )
 file_dropdown.add_separator()
 file_dropdown.add_option(
     option="Save"
 )
 file_dropdown.add_option(
-    option="Save as"
+    option="Save as",
+    command=save_as
 )
 file_dropdown.add_separator()
 
