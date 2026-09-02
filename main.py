@@ -42,29 +42,28 @@ if check.returncode == 0:
     terminal = Terminal(content)
     terminal.grid(row=0, column=1, sticky="nsew")
 
-    compilerpath = check.stdout
+    compilerpath = check.stdout.strip()
+
 else:
     messagebox.showwarning("Flu Compiler Not found", "Please install it on official Fluentix page.\nFluide will run on Editor-only mode.")
     editor = Editor(root)
     editor.pack(expand=True, fill="both")
 
+    compilerpath = False
+
 file_dropdown = CustomDropdownMenu(file_button)
 file_dropdown.add_option(
-    option="New",
-    accelerator="Ctrl+N"
+    option="New"
 )
 file_dropdown.add_option(
-    option="Open",
-    accelerator="Ctrl+O"
+    option="Open"
 )
 file_dropdown.add_separator()
 file_dropdown.add_option(
-    option="Save",
-    accelerator="Ctrl+S"
+    option="Save"
 )
 file_dropdown.add_option(
-    option="Save as",
-    accelerator="Ctrl+Shift+S"
+    option="Save as"
 )
 file_dropdown.add_separator()
 
@@ -76,45 +75,38 @@ settings_dropdown.add_option("Editor")
 settings_dropdown.add_option("Help")
 file_dropdown.add_option(
     option="Exit",
-    command=root.destroy,
-    accelerator="Alt+F4"
+    command=root.destroy
 )
 
 edit_dropdown = CustomDropdownMenu(edit_button)
 edit_dropdown.add_option(
     option="Undo",
-    command=editor.codebox.undo,
-    accelerator="Ctrl+Z"
+    command=editor.codebox.undo
 )
 edit_dropdown.add_option(
     option="Redo",
-    command=editor.codebox.redo,
-    accelerator="Ctrl+Y"
+    command=editor.codebox.redo
 )
 edit_dropdown.add_separator()
 
 edit_dropdown.add_option(
     option="Cut",
-    command=editor.codebox.cut_text,
-    accelerator="Ctrl+X"
+    command=editor.codebox.cut_text
 )
 edit_dropdown.add_option(
     option="Copy",
-    command=editor.codebox.copy_text,
-    accelerator="Ctrl+C"
+    command=editor.codebox.copy_text
 )
 edit_dropdown.add_option(
     option="Paste",
-    command=editor.codebox.paste_text,
-    accelerator="Ctrl+V"
+    command=editor.codebox.paste_text
 )
 
 edit_dropdown.add_separator()
 
 edit_dropdown.add_option(
     option="Select All",
-    command=editor.codebox.select_all_text,
-    accelerator="Ctrl+A"
+    command=editor.codebox.select_all_text
 )
 
 
@@ -122,8 +114,7 @@ edit_dropdown.add_separator()
 
 edit_dropdown.add_option(
     option="Search & Replace",
-    command=editor.codebox.open_search_window,
-    accelerator="Ctrl+F"
+    command=editor.codebox.open_search_window
 )
 
 view_dropdown = CustomDropdownMenu(view_button)
