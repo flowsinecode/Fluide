@@ -56,12 +56,14 @@ else:
 
     compilerpath = False
 
+
     
 def get_content():
     return editor.codebox.get("1.0", "end")
 
 def change_file(content="", namefile="Untitled"):
-    filepath = namefile
+    global filepath
+    filepath = namefile if namefile != "Untitled" else ""
     action.name_file.configure(text=os.path.basename(namefile) if namefile != "Untitled" else namefile)
     editor.codebox.clear_all_text()
     editor.codebox.insert("1.0", content)
@@ -71,10 +73,10 @@ def change_file(content="", namefile="Untitled"):
 def save():
     if filepath:
         #* "" -> False. According to Truthy/Falsy
-        with open(filepath, "w", "utf-8") as file:
+        with open(filepath, "w", encoding="utf-8") as file:
             file.write(editor.codebox.get("1.0", "end"))
     else:
-        lambda: save_as(get_content)
+        save_as(get_content)
 
     #! Bug
 
@@ -94,7 +96,7 @@ file_dropdown.add_option(
 )
 file_dropdown.add_option(
     option="Save as",
-    command=lambda: save_as(get_content)
+    command=lambda: save_as(get_content, change_file)
 )
 file_dropdown.add_separator()
 
