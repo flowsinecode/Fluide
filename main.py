@@ -14,7 +14,7 @@ root = ctk.CTk()
 root.title("Fluide")
 root.geometry('1200x750')
 
-filepath = False
+filepath = ""
 
 menu_bar = CTkMenuBar(root)
 file_button = menu_bar.add_cascade("File")
@@ -76,9 +76,8 @@ def save():
         with open(filepath, "w", encoding="utf-8") as file:
             file.write(editor.codebox.get("1.0", "end"))
     else:
-        save_as(get_content)
+        save_as(get_content, change_file)
 
-    #! Bug
 
 file_dropdown = CustomDropdownMenu(file_button)
 file_dropdown.add_option(
@@ -154,6 +153,19 @@ view_dropdown = CustomDropdownMenu(view_button)
 view_dropdown.add_option(
     option="Zen mode"
 )
+view_dropdown.add_option(
+    option="Full Screen"
+)
 
-
+go_dropdown = CustomDropdownMenu(go_button)
+go_dropdown.add_option(
+    option="Go to Line"
+)
+go_dropdown.add_separator()
+go_dropdown.add_option(
+    option="Back"
+)
+go_dropdown.add_option(
+    option="Forward"
+)
 root.mainloop()
