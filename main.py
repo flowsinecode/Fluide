@@ -2,7 +2,7 @@ import customtkinter as ctk
 from CTkMenuBarPlus import *
 import subprocess
 import tkinter.messagebox as messagebox
-import os
+import os, sys
 
 from ui.editor import Editor
 from ui.terminal import Terminal
@@ -13,8 +13,6 @@ from core.file import save_as, open_file
 root = ctk.CTk()
 root.title("Fluide")
 root.geometry('1200x750')
-
-filepath = ""
 
 menu_bar = CTkMenuBar(root)
 file_button = menu_bar.add_cascade("File")
@@ -55,8 +53,6 @@ else:
     editor.pack(expand=True, fill="both")
 
     compilerpath = False
-
-
     
 def get_content():
     return editor.codebox.get("1.0", "end")
@@ -69,6 +65,13 @@ def change_file(content="", namefile="Untitled"):
     editor.codebox.insert("1.0", content)
     editor.codebox.update_code()
     editor.codebox.clear_history()
+
+if len(sys.argv) > 1: #? Not sure if it work?
+    filepath = sys.argv[1]
+    with open(filepath, "r", encoding="utf-8") as f:
+        change_file(f.read(), filepath)
+else:
+    filepath = ""
 
 def save():
     if filepath:
