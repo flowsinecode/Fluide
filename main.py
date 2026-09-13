@@ -66,7 +66,7 @@ def change_file(content="", namefile="Untitled"):
     editor.codebox.update_code()
     editor.codebox.clear_history()
 
-if len(sys.argv) > 1: #? Not sure if it work?
+if len(sys.argv) > 1:
     filepath = sys.argv[1]
     with open(filepath, "r", encoding="utf-8") as f:
         change_file(f.read(), filepath)
@@ -81,15 +81,32 @@ def save():
     else:
         save_as(get_content, change_file)
 
+def open():
+    if editor.codebox.is_edited():
+        requests = messagebox.askyesnocancel("The file has not been saved", "Do you want to save this file?")
+        if requests:
+            save()
+        elif requests is None:
+            return 0
+    open_file(change_file)
+
+def new():
+    if editor.codebox.is_edited():
+        requests = messagebox.askyesnocancel("The file has not been saved", "Do you want to save this file?")
+        if requests:
+            save()
+        elif requests is None:
+            return 0
+    change_file()
 
 file_dropdown = CustomDropdownMenu(file_button)
 file_dropdown.add_option(
     option="New",
-    command=change_file
+    command=new
 )
 file_dropdown.add_option(
     option="Open",
-    command=lambda: open_file(change_file)
+    command=open
 )
 file_dropdown.add_separator()
 file_dropdown.add_option(
