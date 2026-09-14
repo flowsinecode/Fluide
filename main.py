@@ -22,6 +22,9 @@ go_button = menu_bar.add_cascade("Go")
 
 #Menu bar idk lol
 
+is_full = False
+root.attributes("-fullscreen", is_full)
+
 action = Action(root)
 action.pack(fill="x", padx=8, pady=8)
 
@@ -66,6 +69,11 @@ def change_file(content="", namefile="Untitled"):
     editor.codebox.update_code()
     editor.codebox.clear_history()
 
+def full_screen():
+    global is_full
+    root.attributes("-fullscreen", not is_full)
+    is_full = not is_full
+
 if len(sys.argv) > 1:
     filepath = sys.argv[1]
     with open(filepath, "r", encoding="utf-8") as f:
@@ -89,6 +97,7 @@ def open():
         elif requests is None:
             return 0
     open_file(change_file)
+    editor.codebox.reset_edited()
 
 def new():
     if editor.codebox.is_edited():
@@ -98,6 +107,7 @@ def new():
         elif requests is None:
             return 0
     change_file()
+    editor.codebox.reset_edited()
 
 file_dropdown = CustomDropdownMenu(file_button)
 file_dropdown.add_option(
@@ -174,7 +184,8 @@ view_dropdown.add_option(
     option="Zen mode"
 )
 view_dropdown.add_option(
-    option="Full Screen"
+    option="Full Screen",
+    command=full_screen
 )
 
 go_dropdown = CustomDropdownMenu(go_button)
